@@ -7,5 +7,16 @@
         <ul>
             <li><a href="escape-minify/">Escape Minify</a></li>
         </ul>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            window.onhashchange = function() {
+                location.reload();
+            };
+            $(document).ready(function() {
+                if(window.location.href.indexOf('#latest') >= 0) {
+                    location.replace($('ul li:first-child a').attr('href'));
+                };
+            });
+        </script>
     </body>
 </html>
