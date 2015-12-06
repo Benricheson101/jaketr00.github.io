@@ -7,6 +7,7 @@
     
     <body>
         <textarea class="fortext"></textarea>
+        <div class="github">Fork on GitHub</div>
         <a><div class="convert"><span class="largerText">Convert<br><span class="smallerText">Or press <span class="keyboard" id="cmd1lowercase"></span></span></span></div></a>
         <div class="keyboardbutton" title="Keyboard Shortcuts"><i class="fa fa-keyboard-o fa-2x"></i></div>
         <textarea class="intextcode" readonly></textarea>
@@ -180,6 +181,9 @@
                 };
             }
             $(document).ready(function() {
+                $('.github').click(function() {
+                    window.open('https://github.com/jaketr00/escape-minify', '_blank');
+                })
                 osTest();
                 resize();
                 sizeCheck();
@@ -506,6 +510,10 @@
                     height: height,
                     left: pos1
                 });
+                $('.github').css({
+                    width: widthFix,
+                    left: pos1
+                });
                 $('.intextcode, .intextcodeoverlaybottom, .intextcodeoverlaytop').css({
                     width: widthFix,
                     height: height / 3,
@@ -569,11 +577,13 @@
                 if (textsize > widthFix - 15) {
                     fontsize--;
                     $('.convert').css('font-size', fontsize);
+                    $('.github').css('font-size', fontsize / 2);
                     $('textarea').css('font-size', fontsize / 8);
                     $('.smallerText, .intextcodeidentify, .intextminidentify, .intextcodeminidentify').css('font-size', fontsize / 6)
                 }else if (textsize < widthFix - 25) {
                     fontsize++;
                     $('.convert').css('font-size', fontsize);
+                    $('.github').css('font-size', fontsize / 2);
                     $('textarea').css('font-size', fontsize / 8);
                     $('.smallerText, .intextcodeidentify, .intextminidentify, .intextcodeminidentify').css('font-size', fontsize / 6)
                 }else {
