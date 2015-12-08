@@ -27,11 +27,12 @@
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script>
             window.onhashchange = function() {
-                if (window.location.href.replace(/.*#/) !== '') {hidePage(true)}else {hidePage(false)};
+                if (window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') {hidePage(true)}else {hidePage(false)};
             };
             $(document).ready(function() {
-                
-                if(window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') showPage(window.location.href.replace(/.*#/, ''));
+                if(window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') { 
+                    showPage(window.location.href.replace(/.*#/, ''));
+                };
                 $('.backbutton').click(function() {
                     location.replace(window.location.href.replace(/#.*/, '')+'#');
                 });
@@ -127,6 +128,7 @@
                 });
             };
             function hidePage(show) {
+                $('title').text('Projects');
                 if ($('iframe').length) {
                     $('.backbutton').fadeOut(100);
                     $('.backbutton').removeAttr('style');
