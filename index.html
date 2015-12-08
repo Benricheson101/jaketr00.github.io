@@ -11,11 +11,6 @@
                 height: 0px;
                 border: none;
             }
-            .backbutton {
-                display: none;
-                position: fixed;
-                z-index: 1;
-            }
         </style>
     </head>
     
@@ -32,9 +27,7 @@
                 if(window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') { 
                     showPage(window.location.href.replace(/.*#/, '').replace(/\//, ''));
                 };
-                $('.backbutton').click(function() {
-                    hidePage();
-                });
+                
                 $('li a').click(function(e) {
                     e.preventDefault;
                     $(this).blur;
@@ -47,7 +40,81 @@
                 window.history.pushState(url, url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}), url+'/');
                 $('title').text(url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}));
                 $('body').append('<iframe src="/' + url + '/">');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    
+                //  s = [left/right, top/bottom, margin, borderTop/all, borderRight, borderBottom, borderLeft, radius, padding, width, height, fontFamily, fontSize, color, textShadow, cursor, textAlign, nuberOfBackground, (as many backgrounds)];
+                //  hAllow = true/false;
+                //  h = [left/right, top/bottom, margin, borderTop/all, borderRight, borderBottom, borderLeft, radius, padding, width, height, fontFamily, fontSize, color, textShadow, cursor, textAlign, float, nuberOfBackground, (as many backgrounds)];
+                var s = ['right_0', 'bottom_0', '0', '1px solid rgba(0,0,0,.5)', 'none', 'none', '1px solid rgba(0,0,0,.5)', '0', '5px', '15%', 'auto', 'Helvetica, Arial, sans-serif', '14px', 'white', '0 0 5px black', 'pointer', 'right', '3', '-moz-linear-gradient(top,  rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)', '-webkit-linear-gradient(top,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%)', 'linear-gradient(to bottom,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%)'];  //use xml files to find
+                hAllow = false; //use xml files to find
+                function borders() {
+                    if(s[3].match(/all/i)) {
+                        return ('border:'+s[3].replace(/all/i, '')+';');
+                    }else {
+                        return ('border-top:'+s[3]+';border-right:'+s[4]+';border-bottom:'+s[5]+';border-left:'+s[6]+';');
+                    };
+                };
+                var backgroundArray = [];
+                var backgroundsReturn = '';
+                function backgrounds(num,times) {
+                    if (num < times) {
+                        backgroundArray.push(s[18 + num]);
+                        setTimeout(function() {backgrounds(num+1,times)}, 10);
+                    } else {
+                        backgroundArray = jQuery.map(backgroundArray, function(n) {
+                            return ('background:'+n+';');
+                        });
+                        backgroundsReturn = backgroundArray.join('');
+                    };
+                };
+                backgrounds(0, parseInt(s[17]));
+                if (hAllow) {
+                    function bordersHover() {
+                        if(h[3].match(/all/i)) {
+                            return ('border:'+h[3].replace(/all/i, '')+';');
+                        }else {
+                            return ('border-top:'+h[3]+';border-right:'+h[4]+';border-bottom:'+h[5]+';border-left:'+h[6]+';');
+                        };
+                    };
+                    var backgroundArrayHover = [];
+                    var backgroundsReturnHover = '';
+                    function backgroundsHover(num,times) {
+                        if (num < times) {
+                            backgroundArray.push(s[18 + num]);
+                            setTimeout(function() {backgroundsHover(num+1,times)}, 10);
+                        } else {
+                            backgroundArrayHover = jQuery.map(backgroundArrayHover, function(n) {
+                                return ('background:'+n+';');
+                            });
+                            backgroundsReturnHover = backgroundArrayHover.join('');
+                        };
+                    };
+                    backgroundsHover(0,parseInt(h[17]));
+                }
+                setTimeout(function() {
+                    var entireStyle = 'display:block;pointer-events:all;position:fixed;z-index:1;'+s[0].replace(/_.*/, '')+':' + s[0].replace(/.*_/, '')+';'+s[1].replace(/_.*/, '')+':'+s[1].replace(/.*_/, '')+';margin:'+s[2]+';'+borders()+'border-radius:'+s[7]+';padding:'+s[8]+';width:'+s[9]+';height:'+s[10]+';font-family:'+s[11]+';font-size:'+s[12]+';color:'+s[13]+';text-shadow:'+s[14]+';cursor:'+s[15]+';text-align:'+s[16]+';'+backgroundsReturn;
+                    //$('iframe').contents().find('.backbutton').attr('style', entireStyle);
+                    $('iframe').contents().find('body').append('<div class="backbutton" style="'+entireStyle+'">Back</div>');
+                    $('iframe').contents().find('.backbutton').click(function() {hidePage()});
+                    if (hAllow) {
+                        var entireStyleHover = 'display:block;pointer-events:all;position:fixed;z-index:1;'+h[0].replace(/_.*/, '')+':' + h[0].replace(/.*_/, '')+';'+h[1].replace(/_.*/, '')+':'+h[1].replace(/.*_/, '')+';margin:'+h[2]+';'+bordersHover()+'border-radius:'+h[7]+';padding:'+h[8]+';width:'+h[9]+';height:'+h[10]+';font-family:'+h[11]+';font-size:'+h[12]+';color:'+h[13]+';text-shadow:'+h[14]+';cursor:'+h[15]+';text-align:'+h[16]+';'+backgroundsReturnHover;
+                        /*$('iframe').contents().find('.backbutton').hover(function() {
+                            $('iframe').contents().find('.backbutton').attr('style', entireStyleHover);
+                        }, function() {
+                            $('iframe').contents().find('.backbutton').attr('style', entireStyle);
+                        });*/
+                    }
+                    setTimeout(function() {
+                        backgroundArray = [];
+                        backgroundsReturn = '';
+                        backgroundArrayHover = [];
+                        backgroundsReturnHover = '';
+                    }, 100);
+                }, 10*(s[17]+1));
+                    
+                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 $('iframe').on('load', function() {
+                    //$('iframe').contents().find('body').append('<div class="backbutton">Back</div>');
                     $('iframe').contents().find('.github').css('opacity', '0');
                     $('iframe').animate({
                         width: '100%',
@@ -56,74 +123,6 @@
                         left: '0'
                     }, 1000, function() {
                         setTimeout(function() {$('iframe').contents().find('.github').css('opacity', '1');}, 1000);
-                        //  s = [left/right, top/bottom, margin, borderTop/all, borderRight, borderBottom, borderLeft, radius, padding, width, height, fontFamily, fontSize, color, textShadow, cursor, textAlign, nuberOfBackground, (as many backgrounds)];
-                        //  hAllow = true/false;
-                        //  h = [left/right, top/bottom, margin, borderTop/all, borderRight, borderBottom, borderLeft, radius, padding, width, height, fontFamily, fontSize, color, textShadow, cursor, textAlign, float, nuberOfBackground, (as many backgrounds)];
-                        var s = ['right_0', 'bottom_0', '0', '1px solid rgba(0,0,0,.5)', 'none', 'none', '1px solid rgba(0,0,0,.5)', '0', '5px', '15%', 'auto', 'Helvetica, Arial, sans-serif', '14px', 'white', '0 0 5px black', 'pointer', 'right', '3', '-moz-linear-gradient(top,  rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)', '-webkit-linear-gradient(top,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%)', 'linear-gradient(to bottom,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%)'];  //use xml files to find
-                        hAllow = false; //use xml files to find
-                        function borders() {
-                            if(s[3].match(/all/i)) {
-                                return ('border:'+s[3].replace(/all/i, '')+';');
-                            }else {
-                                return ('border-top:'+s[3]+';border-right:'+s[4]+';border-bottom:'+s[5]+';border-left:'+s[6]+';');
-                            };
-                        };
-                        var backgroundArray = [];
-                        var backgroundsReturn = '';
-                        function backgrounds(num,times) {
-                            if (num < times) {
-                                backgroundArray.push(s[18 + num]);
-                                setTimeout(function() {backgrounds(num+1,times)}, 10);
-                            } else {
-                                backgroundArray = jQuery.map(backgroundArray, function(n) {
-                                    return ('background:'+n+';');
-                                });
-                                backgroundsReturn = backgroundArray.join('');
-                            };
-                        };
-                        backgrounds(0, parseInt(s[17]));
-                        if (hAllow) {
-                            function bordersHover() {
-                                if(h[3].match(/all/i)) {
-                                    return ('border:'+h[3].replace(/all/i, '')+';');
-                                }else {
-                                    return ('border-top:'+h[3]+';border-right:'+h[4]+';border-bottom:'+h[5]+';border-left:'+h[6]+';');
-                                };
-                            };
-                            var backgroundArrayHover = [];
-                            var backgroundsReturnHover = '';
-                            function backgroundsHover(num,times) {
-                                if (num < times) {
-                                    backgroundArray.push(s[18 + num]);
-                                    setTimeout(function() {backgroundsHover(num+1,times)}, 10);
-                                } else {
-                                    backgroundArrayHover = jQuery.map(backgroundArrayHover, function(n) {
-                                        return ('background:'+n+';');
-                                    });
-                                    backgroundsReturnHover = backgroundArrayHover.join('');
-                                };
-                            };
-                            backgroundsHover(0,parseInt(h[17]));
-                        }
-                        setTimeout(function() {
-                            var entireStyle = s[0].replace(/_.*/, '')+':' + s[0].replace(/.*_/, '')+';'+s[1].replace(/_.*/, '')+':'+s[1].replace(/.*_/, '')+';margin:'+s[2]+';'+borders()+'border-radius:'+s[7]+';padding:'+s[8]+';width:'+s[9]+';height:'+s[10]+';font-family:'+s[11]+';font-size:'+s[12]+';color:'+s[13]+';text-shadow:'+s[14]+';cursor:'+s[15]+';text-align:'+s[16]+';'+backgroundsReturn;
-                            $('.backbutton').attr('style', entireStyle);
-                            $('.backbutton').fadeIn(100);
-                            if (hAllow) {
-                                var entireStyleHover = h[0].replace(/_.*/, '')+':' + h[0].replace(/.*_/, '')+';'+h[1].replace(/_.*/, '')+':'+h[1].replace(/.*_/, '')+';margin:'+h[2]+';'+bordersHover()+'border-radius:'+h[7]+';padding:'+h[8]+';width:'+h[9]+';height:'+h[10]+';font-family:'+h[11]+';font-size:'+h[12]+';color:'+h[13]+';text-shadow:'+h[14]+';cursor:'+h[15]+';text-align:'+h[16]+';'+backgroundsReturnHover;
-                                /*$('.backbutton').hover(function() {
-                                    $('.backbutton').attr('style', entireStyleHover);
-                                }, function() {
-                                    $('.backbutton').attr('style', entireStyle);
-                                });*/
-                            }
-                            setTimeout(function() {
-                                backgroundArray = [];
-                                backgroundsReturn = '';
-                                backgroundArrayHover = [];
-                                backgroundsReturnHover = '';
-                            }, 100);
-                        }, 10*(s[17]+1));
                     });
                 });
             };
@@ -131,8 +130,6 @@
                 $('title').text('Projects');
                 window.history.pushState('mainPage', 'Projects', '/');
                 if ($('iframe').length) {
-                    $('.backbutton').fadeOut(100);
-                    $('.backbutton').removeAttr('style');
                     $('iframe').contents().find('.github').css('opacity', '0');
                     $('iframe').animate({
                         width: '0px',
@@ -140,12 +137,12 @@
                         left: '50%',
                         top: '50%'
                     }, 1000, function() {
+                        $('iframe').contents().find('.backbutton').remove();
                         $('iframe').remove();
                     });
                     if (show) setTimeout(function() {showPage(url)}, 1000);
                 }else if (show) showPage(url);
             };
         </script>
-        <div class="backbutton">Back</div>
     </body>
 </html>
