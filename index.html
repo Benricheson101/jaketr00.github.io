@@ -44,6 +44,7 @@
             });
             function showPage(url) {
                 if (url === 'latest') url = $('ul li:first-child a').attr('href');
+                $('title').text(url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}));
                 $('body').append('<iframe src="' + url + '">');
                 $('iframe').on('load', function() {
                     $('iframe').contents().find('.github').css('opacity', '0');
