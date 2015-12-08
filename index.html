@@ -26,11 +26,11 @@
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script>
             window.onhashchange = function() {
-                if (window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') {hidePage(true, window.location.href.replace(/.*#/, ''))}else {hidePage()};
+                if (window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') {hidePage(true, window.location.href.replace(/.*#/, '').replace(/\//, ''))}else {hidePage()};
             };
             $(document).ready(function() {
                 if(window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') { 
-                    showPage(window.location.href.replace(/.*#/, ''));
+                    showPage(window.location.href.replace(/.*#/, '').replace(/\//, ''));
                 };
                 $('.backbutton').click(function() {
                     hidePage();
@@ -44,9 +44,9 @@
             });
             function showPage(url) {
                 if (url === 'latest') url = $('ul li:first-child a').attr('href');
-                window.history.pushState(url, url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}), url);
+                window.history.pushState(url, url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}), url+'/');
                 $('title').text(url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}));
-                $('body').append('<iframe src="' + url + '">');
+                $('body').append('<iframe src="/' + url + '/">');
                 $('iframe').on('load', function() {
                     $('iframe').contents().find('.github').css('opacity', '0');
                     $('iframe').animate({
