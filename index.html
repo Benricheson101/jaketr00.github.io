@@ -143,6 +143,23 @@
                     if (show) setTimeout(function() {showPage(url)}, 1000);
                 }else if (show) showPage(url);
             };
+            window.onpopstate = function() {
+                var show = '';
+                var url = '';
+                function willShow() {
+                    if (window.location.href.indexOf('#') >= 0 && window.location.href.replace(/.*#/, '') != '') {
+                        show = true;
+                        url = window.location.href.replace(/.*#/, '');
+                    }else {
+                        show = false;
+                    };
+                };
+                hidePage(show, url);
+                return false;
+            };
+            //window.onbeforeunload = function() {
+            //    return false;
+            //};
         </script>
     </body>
 </html>
