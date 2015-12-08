@@ -34,7 +34,7 @@
                     showPage(window.location.href.replace(/.*#/, ''));
                 };
                 $('.backbutton').click(function() {
-                    location.replace(window.location.href.replace(/#.*/, '')+'#');
+                    hidePage(false);
                 });
                 $('li a').click(function(e) {
                     e.preventDefault;
@@ -45,6 +45,7 @@
             });
             function showPage(url) {
                 if (url === 'latest') url = $('ul li:first-child a').attr('href');
+                window.history.pushState('1234567890', url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}), url);
                 $('title').text(url.replace(/-/, ' ').replace(/_/, ' ').toLowerCase().replace(/(\b)([a-zA-Z])/g, function(a){return a.toUpperCase()}));
                 $('body').append('<iframe src="' + url + '">');
                 $('iframe').on('load', function() {
@@ -129,6 +130,7 @@
             };
             function hidePage(show) {
                 $('title').text('Projects');
+                window.history.pushState('mainPage', 'Projects', window.location.href.replace($('iframe').attr('src')+'/'));
                 if ($('iframe').length) {
                     $('.backbutton').fadeOut(100);
                     $('.backbutton').removeAttr('style');
