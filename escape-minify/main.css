@@ -5,7 +5,7 @@
     position: fixed;
     cursor: alias;
     color: rgba(0,0,0,1);
-    text-shadow: 0 0 100px rgba(255,255,255,0);
+    text-shadow: 0 0 100px rgba(255,255,255,1);
     text-align: center;
     z-index: 5;
     border-bottom: 1px solid rgba(0,0,0,.5);
