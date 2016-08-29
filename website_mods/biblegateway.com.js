@@ -3,7 +3,7 @@
 // @version      1.0
 // @description  Auto capitalize/More text in search field
 // @author       Jake Rosch
-// @match        *://www.biblegateway.com/*
+// @match        *biblegateway.com/*
 // @grant        none
 // @downloadURL  http://jaketr00.github.io/website_mods/biblegateway.com.js
 // @updateURL    http://jaketr00.github.io/website_mods/biblegateway.com.js
