@@ -5,8 +5,8 @@
 // @author       Jake Rosch
 // @include      *biblegateway.com/*
 // @grant        none
-// @downloadURL  http://jaketr00.github.io/website_mods/biblegateway.com.js
-// @updateURL    http://jaketr00.github.io/website_mods/biblegateway.com.js
+// @downloadURL  http://jaketr00.github.io/website_mods/biblegateway.com.user.js
+// @updateURL    http://jaketr00.github.io/website_mods/biblegateway.com.user.js
 // ==/UserScript==
 
 
