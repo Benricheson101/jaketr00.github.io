@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Client Nicknames (LOCAL)
-// @version      0.1
+// @name         Client Nicknames
+// @version      1.0
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
