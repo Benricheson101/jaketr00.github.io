@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Client Nicknames
-// @version      1.0
+// @version      1.0.1
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
@@ -28,7 +28,7 @@
                 e.target.getAttribute('aria-label') === 'Conversation actions') {
 
                 var popup,
-                    id = e.target.parentElement.parentElement.parentElement.getAttribute('aria-describedby').replace('row_header_id_user:', '');
+                    id = e.target.parentElement.parentElement.parentElement.getAttribute('aria-describedby').replace(/row_header_id_\w+:/, '');
 
                 for (var i = 0; document.querySelectorAll('.uiContextualLayerPositioner.uiLayer').length > i; i++)
                     if (document.querySelectorAll('.uiContextualLayerPositioner.uiLayer')[i].getAttribute('class').split(' ').indexOf('hidden_elem') === -1)
@@ -78,7 +78,7 @@
                                 GM_setValue('overrideOriginalName', JSON.stringify(overrideOriginalName));
 
                                 if (!originalNames['_'+id]) {
-                                    var name = document.getElementById('row_header_id_user:'+id).querySelector('._1ht6');
+                                    var name = (document.getElementById('row_header_id_user:'+id) || document.getElementById('row_header_id_thread:'+id)).querySelector('._1ht6');
                                     name = name.children && name.children[0] ? name.children[0].innerHTML : name.innerHTML;
                                     originalNames['_'+id] = name.replace(/<!--.*?-->/g, '');
                                 }
@@ -100,7 +100,7 @@
                                 GM_setValue('nicknames', JSON.stringify(nicknames));
                                 GM_setValue('overrideOriginalName', JSON.stringify(overrideOriginalName));
 
-                                document.getElementById('row_header_id_user:'+id).querySelector('._1ht6').innerHTML = originalNames['_'+id];
+                                (document.getElementById('row_header_id_user:'+id) || document.getElementById('row_header_id_thread:'+id)).querySelector('._1ht6').innerHTML = originalNames['_'+id];
 
                             }
                         });
@@ -113,20 +113,21 @@
             }
         }
 
+        var timestamps = {};
         function setNicks() {
 
             for (var thisid in nicknames) {
                 thisid = thisid.replace('_', '');
 
-                var thisname;
-                if (overrideOriginalName['_'+thisid])
-                    thisname = nicknames['_'+thisid];
-                else
-                    thisname = originalNames['_'+thisid]+'<i style="font-size:11px;margin-left:2px;">'+nicknames['_'+thisid]+'</i>';
+                var elem = (document.getElementById('row_header_id_user:'+thisid) || document.getElementById('row_header_id_thread:'+thisid)).querySelector('._1ht6');
 
-                document.getElementById('row_header_id_user:'+thisid).querySelector('._1ht6').innerHTML = thisname;
+                if (overrideOriginalName['_'+thisid]) {
+                    elem.setAttribute('title', originalNames['_'+thisid]);
+                    elem.innerHTML = nicknames['_'+thisid];
+                } else
+                    elem.innerHTML = originalNames['_'+thisid] + '<i style="font-size:11px;margin-left:2px;">' + nicknames['_'+thisid] + '</i>';
 
-                /*if (location.pathname.replace('/t/', '') === thisid) {
+                /*if (location.pathname.replace('/t/', '') === thisid) { //top name, breaks page
                     document.querySelector('#js_6 ._3oh-').innerHTML = thisname;
 
                     if (overrideOriginalName['_'+thisid])
@@ -151,12 +152,12 @@
 
         for (var checkid in nicknames) {
 
-            var name = document.getElementById('row_header_id_user:'+checkid.replace('_', '')).querySelector('._1ht6');
+            var name = (document.getElementById('row_header_id_user:'+checkid.replace('_', '')) || document.getElementById('row_header_id_thread:'+checkid.replace('_', ''))).querySelector('._1ht6');
             name = name.children && name.children[0] ? name.children[0].innerHTML : name.innerHTML;
             originalNames[checkid] = name.replace(/<!--.*?-->/g, '');
 
         }
-        console.log(originalNames)
+        console.log(originalNames);
 
     });
 })();
