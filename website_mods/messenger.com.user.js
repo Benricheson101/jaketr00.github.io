@@ -173,14 +173,15 @@
                                 syncURLButton.setAttribute('class', classes.presentation);
                             });
                             syncURLButton.addEventListener('click', function() {
-                                var newURL = prompt('Please enter a URL', syncURL ? syncURL : '');
+                                alert('This is not set up yet, and does not work');
+                                /*var newURL = prompt('Please enter a URL', syncURL ? syncURL : '');
 
                                 if (newURL) {
 
                                     syncURL = newURL;
                                     GM_setValue('syncURL', syncURL);
 
-                                }
+                                }*/
                             });
 
                             exportButton.addEventListener('mouseover', function() {
