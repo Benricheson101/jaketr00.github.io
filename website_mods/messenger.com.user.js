@@ -8,6 +8,7 @@
 // @grant        GM_setValue
 // @downloadURL  http://jaketr00.github.io/website_mods/messenger.com.user.js
 // @updateURL    http://jaketr00.github.io/website_mods/messenger.com.user.js
+// ==/UserScript==
 
 (function() {
     addEventListener('load', function() {
