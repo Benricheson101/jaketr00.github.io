@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Client Nicknames
-// @version      1.0.2
+// @version      1.2.1
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
@@ -42,7 +42,7 @@
                 if (e.target.getAttribute('aria-label') === 'Conversation actions') {
 
                     var id = e.target.parentElement.parentElement.parentElement.getAttribute('aria-describedby').replace(/row_header_id_\w+:/, ''),
-                        name = allNameInfo['_'+id];
+                        name = allNameInfo['_'+id] ? allNameInfo['_'+id] : {nickname: "", overrideOriginalName: false};
                     console.log(name);
 
                     for (var i = 0; document.querySelectorAll('.uiContextualLayerPositioner.uiLayer').length > i; i++)
