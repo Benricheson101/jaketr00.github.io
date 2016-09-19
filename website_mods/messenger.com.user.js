@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Client Nicknames
-// @version      1.2.1
+// @version      1.2.2
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
@@ -82,7 +82,7 @@
                                 presentation.setAttribute('class', classes.presentation);
                             });
                             presentation.addEventListener('click', function() {
-                                var newnick = prompt('Please enter a name', name.nickname ? name.nickname : ''),
+                                var newnick = prompt('Please enter a name', allNameInfo['_'+id] ? allNameInfo['_'+id].nickname : ''),
                                     override = confirm('Override Original Name?');
 
                                 if (newnick) {
