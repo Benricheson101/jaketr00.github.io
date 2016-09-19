@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Client Nicknames
-// @version      1.2.2
+// @version      1.2.3
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
@@ -14,8 +14,8 @@
     addEventListener('load', function() {
 
         var allNameInfo = JSON.parse(GM_getValue('nicknames', '{}')),
-            nicknames = JSON.parse(GM_getValue('nickname', '{}')),
-            overrideOriginalName = JSON.parse(GM_getValue('overrideOriginalName', '{}')),
+            /*nicknames = JSON.parse(GM_getValue('nickname', '{}')),
+            overrideOriginalName = JSON.parse(GM_getValue('overrideOriginalName', '{}')),*/
             originalNames = {},
             specialIds = {},
             classes = {
@@ -24,6 +24,7 @@
                 hover: '_54ne'
             },
             syncURL = GM_getValue('syncURL', '');
+        console.log(allNameInfo);
 
         function isValidJSON(str) {
             try {
@@ -87,15 +88,17 @@
 
                                 if (newnick) {
 
-                                    allNameInfo['_'+id].nickname = newnick;
-                                    allNameInfo['_'+id].overrrideOriginalName = override;
-                                    GM_setValue('nicknames', JSON.stringify(allNameInfo));
-
                                     if (!originalNames['_'+id]) {
                                         var name = (document.getElementById('row_header_id_user:'+id) || document.getElementById('row_header_id_thread:'+id)).querySelector('._1ht6');
                                         name = name.children && name.children[0] ? name.children[0].innerHTML : name.innerHTML;
                                         originalNames['_'+id] = name.replace(/<!--.*?-->/g, '');
                                     }
+
+                                    if (!allNameInfo['_'+id])
+                                        allNameInfo['_'+id] = {};
+                                    allNameInfo['_'+id].nickname = newnick;
+                                    allNameInfo['_'+id].overrideOriginalName = override;
+                                    GM_setValue('nicknames', JSON.stringify(allNameInfo));
 
                                 }
                             });
