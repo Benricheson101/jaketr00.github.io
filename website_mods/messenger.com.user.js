@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Client Nicknames
-// @version      1.2.3
+// @version      1.2.4
 // @description  Client Nicknames for Facebook Messenger.  They do not sync with Facebook so the other person will not see these.
 // @author       Jake Rosch
 // @include      *messenger.com*
@@ -8,14 +8,11 @@
 // @grant        GM_setValue
 // @downloadURL  http://jaketr00.github.io/website_mods/messenger.com.user.js
 // @updateURL    http://jaketr00.github.io/website_mods/messenger.com.user.js
-// ==/UserScript==
 
 (function() {
     addEventListener('load', function() {
 
         var allNameInfo = JSON.parse(GM_getValue('nicknames', '{}')),
-            /*nicknames = JSON.parse(GM_getValue('nickname', '{}')),
-            overrideOriginalName = JSON.parse(GM_getValue('overrideOriginalName', '{}')),*/
             originalNames = {},
             specialIds = {},
             classes = {
@@ -99,6 +96,13 @@
                                     allNameInfo['_'+id].nickname = newnick;
                                     allNameInfo['_'+id].overrideOriginalName = override;
                                     GM_setValue('nicknames', JSON.stringify(allNameInfo));
+
+                                } else if (confirm('Are you sure you want to remove the nick?')) {
+
+                                    delete allNameInfo['_'+id];
+                                    GM_setValue('nicknames', JSON.stringify(allNameInfo));
+
+                                    (document.getElementById('row_header_id_user:'+id) || document.getElementById('row_header_id_thread:'+id)).querySelector('._1ht6').innerHTML = originalNames['_'+id];
 
                                 }
                             });
@@ -197,7 +201,7 @@
                             });
                             importButton.addEventListener('click', function() {
                                 var imported = prompt('Please paste the JSON from the export'),
-                                    merge = confirm('Merge or Replace? (OK = Merge, Cancel = Replace)');
+                                    merge = imported ? confirm('Merge or Replace? (OK = Merge, Cancel = Replace)') : null;
 
                                 if (imported) {
 
@@ -207,12 +211,15 @@
 
                                             var JSONall = JSON.parse(imported),
                                                 error = false;
+                                            console.log(JSONall);
                                             for (var id in JSONall) {
-                                                if (JSONall[id].nickname && JSONall[id].overrideOriginalname) {
-                                                    allNameInfo[id] = JSONall[id];
-                                                } else {
-                                                    error = true;
-                                                    alert('Invalid JSON');
+                                                if (!error) {
+                                                    if (typeof JSONall[id].nickname === 'string' && typeof JSONall[id].overrideOriginalName === 'boolean') {
+                                                        allNameInfo[id] = JSONall[id];
+                                                    } else {
+                                                        error = true;
+                                                        alert('Invalid JSON');
+                                                    }
                                                 }
                                             }
                                             if (!error)
@@ -220,8 +227,14 @@
 
                                         } else {
 
+                                            var oldNicks = allNameInfo;
+
                                             allNameInfo = JSON.parse(imported);
                                             GM_setValue('nicknames', JSON.stringify(allNameInfo));
+
+                                            for (var oldid in oldNicks)
+                                                if (!allNameInfo[oldid])
+                                                    (document.getElementById('row_header_id_user:'+oldid.replace('_', '')) || document.getElementById('row_header_id_thread:'+oldid.replace('_', ''))).querySelector('._1ht6').innerHTML = originalNames[oldid];
 
                                         }
 
@@ -242,7 +255,7 @@
         }
 
         var timestamps = {};
-        function setNicks() {
+        function setNicks() {//doesn't remove, just adds. broken with import
 
             for (var thisid in allNameInfo) {
                 thisid = thisid.replace('_', '');
