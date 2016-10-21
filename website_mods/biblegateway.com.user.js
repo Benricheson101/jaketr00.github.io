@@ -11,9 +11,7 @@
 
 
 (function() {
-    var shortcut = {
-        //_pr: 'Proverbs'
-    };
+    var shortcut = {};
     addEventListener('load', function() {
 
         function doGetCaretPosition(oField) {
@@ -106,10 +104,22 @@
 
                 }
 
-                value = value.replace(/\d [\d\w]/g, function(c) {
+                //value = value.replace(/\d [\d\w]/g, function(c) {
+                value = value.replace(/[\w\d][ \-:]\d [\w\d]/g, function(c) {
 
                     pos++;
-                    return c.replace(' ', ', ');
+                    var cs = c.split(' '),
+                        cj = '';
+                    for (var i = 0; cs.length > i; i++) {
+                        if (i === 0)
+                            cj+= cs[i];
+                        else if (i === cs.length-1)
+                            cj+= ', '+cs[i];
+                        else
+                            cj+= ' '+cs[i];
+                    }
+                    
+                    return cj;
 
                 });
 
