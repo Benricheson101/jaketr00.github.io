@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Capitalize Text/More
-// @version      1.1
+// @version      1.0.1
 // @description  Auto capitalize/More text in search field
 // @author       Jake Rosch
 // @include      *biblegateway.com/*
