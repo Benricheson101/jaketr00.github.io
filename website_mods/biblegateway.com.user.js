@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Capitalize Text/More
-// @version      1.0
+// @version      1.1
 // @description  Auto capitalize/More text in search field
 // @author       Jake Rosch
 // @include      *biblegateway.com/*
@@ -8,7 +8,6 @@
 // @downloadURL  http://jaketr00.github.io/website_mods/biblegateway.com.user.js
 // @updateURL    http://jaketr00.github.io/website_mods/biblegateway.com.user.js
 // ==/UserScript==
-
 
 (function() {
     var shortcut = {};
@@ -107,7 +106,8 @@
                 //value = value.replace(/\d [\d\w]/g, function(c) {
                 value = value.replace(/[\w\d][ \-:]\d [\w\d]/g, function(c) {
 
-                    pos++;
+                    if (e.keyCode === 32)
+                        pos++;
                     var cs = c.split(' '),
                         cj = '';
                     for (var i = 0; cs.length > i; i++) {
@@ -118,7 +118,7 @@
                         else
                             cj+= ' '+cs[i];
                     }
-                    
+
                     return cj;
 
                 });
